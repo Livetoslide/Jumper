@@ -32,10 +32,14 @@ int main()
         plat[i].y = rand() % 533;
     }
     int x = 100, y = 100, h = 200;
+    int maxX = 400;
+    int MinX = 0;
     float dx = 0, dy = 0;
+    bool GameOver = false;
 
-    while (app.isOpen())
+    while (app.isOpen()&& !GameOver)
     {
+
         Event e;
         while (app.pollEvent(e))
         {
@@ -43,13 +47,14 @@ int main()
                 app.close();
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Right)) x += 3;
-        if (Keyboard::isKeyPressed(Keyboard::Left)) x -= 3;
+        if (Keyboard::isKeyPressed(Keyboard::Right)&& (x<maxX-50)) x += 3;
+        if (Keyboard::isKeyPressed(Keyboard::Left)&& (x>MinX-30)) x -= 3;
 
         dy += 0.2;
         y += dy;
         if (y > 500) dy = -10;
 
+        
 
         if (y<h)
             for (int i = 0; i < 10; i++)
@@ -67,15 +72,17 @@ int main()
         
 
         sPers.setPosition(x, y);
+        if (sPers.getPosition().y > 500) GameOver = true;
 
 
         app.draw(sBackground);
-        app.draw(sPers);
         for (int i = 0; i < 10; i++)
         {
             sPlat.setPosition(plat[i].x, plat[i].y);
             app.draw(sPlat);
         }
+        app.draw(sPers);
+       
 
         app.display();
     }
