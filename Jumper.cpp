@@ -40,9 +40,7 @@ int main()
     while (app.isOpen()&& !GameOver)
     {
         
-        Font font;
-        font.loadFromFile("arial.ttf");
-        Text txt;
+ 
        
             
         Event e;
