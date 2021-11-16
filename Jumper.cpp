@@ -81,6 +81,7 @@ int main()
 
         app.draw(sBackground);
         for (int i = 0; i < 10; i++)
+      
         {
             sPlat.setPosition(plat[i].x, plat[i].y);
             app.draw(sPlat);
