@@ -39,7 +39,12 @@ int main()
 
     while (app.isOpen()&& !GameOver)
     {
-
+        
+        Font font;
+        font.loadFromFile("arial.ttf");
+        Text txt;
+       
+            
         Event e;
         while (app.pollEvent(e))
         {
@@ -75,6 +80,7 @@ int main()
         if (sPers.getPosition().y > 500) GameOver = true;
 
 
+
         app.draw(sBackground);
         for (int i = 0; i < 10; i++)
         {
@@ -82,7 +88,6 @@ int main()
             app.draw(sPlat);
         }
         app.draw(sPers);
-       
 
         app.display();
     }
