@@ -31,9 +31,9 @@ bool game() {
     for (int i = 0; i < 5; i++)
     {
         plat[i].x = rand() % 350;
-        plat[i].y = rand() % 620;
+        plat[i].y = rand() % 533;
         plat2[i].x = rand() % 350;
-        plat2[i].y = rand() % 620;
+        plat2[i].y = rand() % 533;
         
 
     }
@@ -71,7 +71,7 @@ bool game() {
 
         dy += 0.2;
         y += dy;
-        if (y > 500) dy = -10;
+
 
 
         if (y < h)
@@ -80,10 +80,14 @@ bool game() {
                 y = h;
                 plat[i].y = plat[i].y - dy;
                 plat2[i].y = plat2[i].y - dy;
-                if (plat[i].y > 533 && plat2[i].y > 533)
+                if (plat[i].y > 533)
                 {
                     plat[i].y = 0;
                     plat[i].x = rand() % 400;
+                   
+                }
+                if (plat2[i].y > 533)
+                {
                     plat2[i].y = 0;
                     plat2[i].x = rand() % 400;
                 }
@@ -95,14 +99,30 @@ bool game() {
             
             if ((x + 15 > plat[i].x) && (x + 5 < plat[i].x + 65)
                 && (y + 40 > plat[i].y) && (y + 70 < plat[i].y + 75) && (dy > 0)) {
-                dy -= 16;
-                sound.play();
+                if (y > 100) {
+                    dy -= 20;
+                    sound.play();
+                }
+                else
+                {
+                    dy -= 16;
+                    sound.play();
+                }
+                
             }
             else if ((x + 15 > plat2[i].x) && (x + 5 < plat2[i].x + 65)
                 && (y + 40 > plat2[i].y) && (y + 70 < plat2[i].y + 75) && (dy > 0))
             {
-                dy -= 16;
-                sound.play();
+                if (y > 100) {
+                    dy -= 20;
+                    sound.play();
+                }
+                else
+                {
+                    dy -= 16;
+                    sound.play();
+                }
+               
             }
 
         }
