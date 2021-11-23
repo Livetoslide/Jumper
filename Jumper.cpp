@@ -4,45 +4,61 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <time.h>
-using namespace sf;
+#include <SFML/Audio.hpp>
 
+using namespace sf;
 struct point
 {
     int x, y;
 };
+bool GameOver = false;
 
-int main()
-{
+bool game() {
     srand(time(0));
 
     RenderWindow app(VideoMode(400, 533), "Game");
     app.setFramerateLimit(60);
-    Texture t1, t2, t3;
+    Texture t1, t2, t3, t4;
     t1.loadFromFile("images/background.png");
-    t2.loadFromFile("images/platform.png");
+    t2.loadFromFile("images/platform2.png");
     t3.loadFromFile("images/doodle.png");
+    t4.loadFromFile("images/platform3.png");
+    Sprite sBackground(t1), sPlat(t2), sPers(t3), sPlat2(t4);
 
-    Sprite sBackground(t1), sPlat(t2), sPers(t3);
-
-    point plat[20];
-
-    for (int i = 0; i < 10; i++)
+    point plat[10];
+    point plat2[10];
+    //Спавн координат бутылок
+    for (int i = 0; i < 5; i++)
     {
-        plat[i].x = rand() % 400;
-        plat[i].y = rand() % 533;
+        plat[i].x = rand() % 350;
+        plat[i].y = rand() % 620;
+        plat2[i].x = rand() % 350;
+        plat2[i].y = rand() % 620;
+        
+
     }
-    int x = 100, y = 100, h = 200;
+
+    // Звук пук
+    SoundBuffer buffer;
+    buffer.loadFromFile("sounds/op.ogg");
+    Sound sound;
+    sound.setBuffer(buffer);
+    //Звук музыка
+    Music mainmus;
+    mainmus.openFromFile("sounds/main_theme.ogg");
+    mainmus.setPlayingOffset(seconds(1.5));
+    mainmus.play();
+
+    int x = 100, y = 0, h = 200;
     int maxX = 400;
     int MinX = 0;
     float dx = 0, dy = 0;
-    bool GameOver = false;
+    
 
-    while (app.isOpen()&& !GameOver)
+    while (app.isOpen())
     {
-        
- 
-       
-            
+
+
         Event e;
         while (app.pollEvent(e))
         {
@@ -50,46 +66,83 @@ int main()
                 app.close();
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Right)&& (x<maxX-50)) x += 3;
-        if (Keyboard::isKeyPressed(Keyboard::Left)&& (x>MinX-30)) x -= 3;
+        if (Keyboard::isKeyPressed(Keyboard::Right) && (x < maxX - 50)) x += 4;
+        if (Keyboard::isKeyPressed(Keyboard::Left) && (x > MinX - 30)) x -= 4;
 
         dy += 0.2;
         y += dy;
         if (y > 500) dy = -10;
 
-        
 
-        if (y<h)
-            for (int i = 0; i < 10; i++)
+        if (y < h)
+            for (int i = 0; i < 5; i++)
             {
                 y = h;
                 plat[i].y = plat[i].y - dy;
-                if (plat[i].y > 533) { plat[i].y = 0; plat[i].x = rand() % 400; }
+                plat2[i].y = plat2[i].y - dy;
+                if (plat[i].y > 533 && plat2[i].y > 533)
+                {
+                    plat[i].y = 0;
+                    plat[i].x = rand() % 400;
+                    plat2[i].y = 0;
+                    plat2[i].x = rand() % 400;
+                }
             }
 
-        for (int i = 0; i < 10; i++)
+
+        for (int i = 0; i < 5; i++)
         {
-            if ((x + 50 > plat[i].x) && (x + 20 < plat[i].x + 68)
-                && (y + 70 > plat[i].y) && (y + 70 < plat[i].y + 14) && (dy > 0)) dy -= 14;
+            
+            if ((x + 15 > plat[i].x) && (x + 5 < plat[i].x + 65)
+                && (y + 40 > plat[i].y) && (y + 70 < plat[i].y + 75) && (dy > 0)) {
+                dy -= 16;
+                sound.play();
+            }
+            else if ((x + 15 > plat2[i].x) && (x + 5 < plat2[i].x + 65)
+                && (y + 40 > plat2[i].y) && (y + 70 < plat2[i].y + 75) && (dy > 0))
+            {
+                dy -= 16;
+                sound.play();
+            }
+
         }
-        
+
 
         sPers.setPosition(x, y);
         if (sPers.getPosition().y > 500) GameOver = true;
 
+        if (GameOver == true) {
+            return GameOver;
+        }
+
 
 
         app.draw(sBackground);
-        for (int i = 0; i < 10; i++)
-      
+        for (int i = 0; i < 5; i++)
+
         {
             sPlat.setPosition(plat[i].x, plat[i].y);
+            sPlat2.setPosition(plat2[i].x, plat2[i].y);
             app.draw(sPlat);
+            app.draw(sPlat2);
+
         }
         app.draw(sPers);
 
         app.display();
     }
+}
+
+int main()
+{
+    while (GameOver == false)
+    {
+        game();
+        if (GameOver = true) {
+            GameOver = false;
+        }
+    }
+
 
     return 0;
 }
