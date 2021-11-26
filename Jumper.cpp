@@ -80,6 +80,7 @@ bool game() {
                 y = h;
                 plat[i].y = plat[i].y - dy;
                 plat2[i].y = plat2[i].y - dy;
+                 
                 if (plat[i].y > 533)
                 {
                     plat[i].y = 10;
@@ -88,7 +89,7 @@ bool game() {
                 }
                 if (plat2[i].y > 533)
                 {
-                    plat2[i].y = 10;
+                    plat2[i].y = 11;
                     plat2[i].x = rand() % 400;
                 }
             }
